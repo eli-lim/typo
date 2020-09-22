@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "yarn run watch:css && react-scripts start",
-    "build": "yarn run build:css && react-scripts build",
+    "build": "export NODE_ENV=production && yarn run build:css && react-scripts build",
     "test": "react-scripts test",
     "cypress": "cypress open",
     "eject": "react-scripts eject",
