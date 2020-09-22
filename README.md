@@ -3,6 +3,7 @@ A tiny project to play around with React, Typescript, TailwindCSS & Cypress <br/
 100% inspired by **briano1905**'s [typings.gg](https://typings.gg/)
 
 ![typo screenshot png](./docs/typo.png "Typo Screenshot")
+[Demo on Netlify](https://eli-typo.netlify.app)
 
 ## Automated Testing (+ visual demo) with Cypress
 1. Run `yarn install` to download project dependencies
