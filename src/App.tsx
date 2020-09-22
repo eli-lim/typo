@@ -1,24 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import TypingTest from "./components/TypingTest";
+import DifficultySelect from "./components/DifficultySelect";
+import TypingStats from "./components/TypingStats";
+import { Stat, Difficulty } from "./types";
 
-function App() {
+const App: React.FC = () => {
+
+  const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.Normal);
+  const [stats, setStats] = useState<Stat[]>([]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      className="bg-dracula-bg h-screen font-mono flex flex-col justify-center items-center"
+      style={{ minHeight: 600 }}
+    >
+      <div className="max-w-2xl" style={{ minWidth: 300 }}>
+        <div className="flex justify-between items-center mb-2">
+          <DifficultySelect id="difficulty-select" onChange={setDifficulty} value={difficulty} />
+          <TypingStats id="typing-stats" stats={stats} />
+        </div>
+        <TypingTest
+          difficulty={difficulty}
+          onStatsChange={setStats}
+        />
+      </div>
     </div>
   );
 }
