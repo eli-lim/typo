@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Banner from "./components/Banner";
+import Footer from "./components/Footer";
 import TypingTest from "./components/TypingTest";
 import DifficultySelect from "./components/DifficultySelect";
 import TypingStats from "./components/TypingStats";
@@ -11,9 +13,10 @@ const App: React.FC = () => {
 
   return (
     <div
-      className="bg-dracula-bg h-screen font-mono flex flex-col justify-center items-center"
+      className="relative bg-dracula-bg h-screen font-mono flex flex-col justify-center items-center p-4"
       style={{ minHeight: 600 }}
     >
+      <Banner />
       <div className="max-w-2xl" style={{ minWidth: 300 }}>
         <div className="flex justify-between items-center mb-2">
           <DifficultySelect id="difficulty-select" onChange={setDifficulty} value={difficulty} />
@@ -24,6 +27,7 @@ const App: React.FC = () => {
           onStatsChange={setStats}
         />
       </div>
+      <Footer />
     </div>
   );
 }

@@ -89,7 +89,6 @@ const TypingTest: React.FC<Props> = ({
       className="p-4 rounded shadow-lg bg-dracula-white hover:shadow-2xl
         flex flex-col justify-between items-center"
     >
-      <h1>Typo</h1>
       <TestText
         completedWords={completedWords}
         currentWord={currentWord}
