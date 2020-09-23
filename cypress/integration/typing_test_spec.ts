@@ -1,20 +1,9 @@
 /// <reference types="cypress" />
-
-const siteUrl = process.env.SITE_URL || 'http://localhost:3000'
+import {siteUrl} from "../common";
+import {Difficulty} from "../../src/types";
 
 const SPACE_BAR = ' ';
 const NBSP = String.fromCharCode(160);
-
-describe('Site', () => {
-  beforeEach(() => {
-    cy.visit(siteUrl)
-  })
-
-  it('should display the Typo brand', () => {
-    cy.contains('Typo').should('exist')
-  })
-})
-
 
 describe('Typing Test : Input', () => {
 
@@ -23,15 +12,14 @@ describe('Typing Test : Input', () => {
   })
 
   it('should start with empty input', () => {
-    const input = cy.get('#test-container input')
-    input.should($input => {
-      expect($input.val()).to.equal('')
-    })
+    cy
+    .get('#test-container input')
+    .should('have.value', '')
   })
 
   it('should not reset input value without spacebar', () => {
     const input = cy.get('#test-container input')
-    input.type('testinput', { delay: 50 });
+    input.type('testinput');
     input.should('have.value', 'testinput');
   })
 
@@ -125,7 +113,7 @@ describe('Typing Test : Text', () => {
     .get('.w-current')
     .first()
     .then($firstWord => {
-      const firstWordText = $firstWord.text().replaceAll(NBSP, '');
+      const firstWordText = $firstWord.text().replace(new RegExp(NBSP, 'g'), '');
 
       const input = cy.get('#test-container input')
       input.type(firstWordText + SPACE_BAR)
@@ -153,7 +141,7 @@ describe('Typing Test : Text', () => {
     .get('.w-current')
     .first()
     .then($firstWord => {
-      const firstWordText = $firstWord.text().replaceAll(NBSP, SPACE_BAR).trim();
+      const firstWordText = $firstWord.text().replace(new RegExp(NBSP, 'g'), SPACE_BAR).trim();
 
       const input = cy.get('#test-container input')
       input.type(firstWordText + SPACE_BAR )
@@ -185,15 +173,15 @@ describe('Typing Test : Difficulty', () => {
 
   it('should change words after selecting difficulty', () => {
     // Is there a way to avoid this promise hell? :(
-    cy.get('#difficulty-select').select('Normal')
+    cy.get('#difficulty-select').select(Difficulty.Normal)
       .then(() => {
         cy.get('#test-text').then($p => {
           const normalLength = $p.text().length;
-          cy.get('#difficulty-select').select('Hard')
+          cy.get('#difficulty-select').select(Difficulty.Hard)
             .then(() => {
               cy.get('#test-text').then($p => {
                 const hardLength = $p.text().length;
-                cy.get('#difficulty-select').select('God')
+                cy.get('#difficulty-select').select(Difficulty.God)
                   .then(() => {
                     cy.get('#test-text').then($p => {
                       const godLength = $p.text().length;
@@ -230,7 +218,7 @@ describe('Typing Test : Stats', () => {
       .invoke('text')
       .as('typingStatsText1')
 
-      selectDifficulty('Hard')
+      selectDifficulty(Difficulty.Hard)
 
       cy
       .get('#typing-stats')
@@ -274,7 +262,7 @@ describe('Typing Test : Stats', () => {
 
         cy
         .get('@accText')
-        .then(text => {
+        .then((text: any) => {
           const accValue = text.replace('ACC: ', '').replace('%', '');
           expect(Number.parseFloat(accValue)).to.be.equals(0);
         })
@@ -292,7 +280,7 @@ describe('Typing Test : Stats', () => {
 
         cy
         .get('@wpmText')
-        .then(text => {
+        .then((text: any) => {
           const wpmValue = text.replace('WPM: ', '');
           expect(Number.parseFloat(wpmValue)).to.be.greaterThan(100);
         })
@@ -379,7 +367,7 @@ describe('Typing Test : Reset Button', () => {
 
 
 // --- HELPERS
-function selectDifficulty(difficulty) {
+function selectDifficulty(difficulty: Difficulty) {
   return cy.get('#difficulty-select').select(difficulty);
 }
 
@@ -391,7 +379,7 @@ function typeAllWords(allCorrect = true) {
     .invoke('text')
     .then(testText => {
       const input = cy.get('#test-container input')
-      testText = testText.replaceAll(NBSP, SPACE_BAR).trim()
+      testText = testText.replace(new RegExp(NBSP, 'g'), SPACE_BAR).trim()
 
       if (allCorrect) {
         input.type(testText + SPACE_BAR, { delay })
